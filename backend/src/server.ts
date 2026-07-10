@@ -3,7 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import helmet from 'helmet';
 import routes from './routes';
-import { apiLimiter } from './middlewares/security';
+import { apiLimiter } from './middlewares/rateLimiter';
 
 dotenv.config();
 
