@@ -1,24 +1,13 @@
 import React, { useState } from 'react';
 import { SearchQuery } from '../types';
 import { PlaneTakeoff, PlaneLanding, Calendar, Award, User, Search } from 'lucide-react';
+import { AirportSelect } from './AirportSelect';
 
 interface SearchFormProps {
   initialValues?: SearchQuery;
   onSearch: (query: SearchQuery) => void;
   horizontal?: boolean;
 }
-
-const AIRPORTS = [
-  { code: 'LHR', name: 'London Heathrow' },
-  { code: 'JFK', name: 'New York JFK' },
-  { code: 'CDG', name: 'Paris Charles de Gaulle' },
-  { code: 'NRT', name: 'Tokyo Narita' },
-  { code: 'KBP', name: 'Kyiv Boryspil' },
-  { code: 'DXB', name: 'Dubai International' },
-  { code: 'FCO', name: 'Rome Fiumicino' },
-  { code: 'SYD', name: 'Sydney Kingsford Smith' },
-  { code: 'DPS', name: 'Bali Ngurah Rai' }
-];
 
 export const SearchForm: React.FC<SearchFormProps> = ({ initialValues, onSearch, horizontal = false }) => {
   const [origin, setOrigin] = useState(initialValues?.origin || 'LHR');
@@ -45,29 +34,22 @@ export const SearchForm: React.FC<SearchFormProps> = ({ initialValues, onSearch,
         )}
         
         <div className={horizontal ? "search-form-horizontal" : ""} style={{ display: horizontal ? 'flex' : 'grid', gridTemplateColumns: horizontal ? 'none' : '1fr 1fr', gap: '24px' }}>
-          <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
-            <label className="form-label" htmlFor="origin">
-              <PlaneTakeoff size={18} style={{ marginRight: '8px', verticalAlign: 'text-bottom', color: 'var(--primary-color)' }} />
-              From
-            </label>
-            <select id="origin" value={origin} onChange={(e) => setOrigin(e.target.value)} className="form-input" style={{ fontSize: '1.05rem', padding: '14px 16px' }}>
-              {AIRPORTS.map((ap) => (
-                <option key={ap.code} value={ap.code}>{ap.name} ({ap.code})</option>
-              ))}
-            </select>
-          </div>
+          
+          <AirportSelect 
+            id="origin"
+            label={<><PlaneTakeoff size={18} style={{ marginRight: '8px', verticalAlign: 'text-bottom', color: 'var(--primary-color)' }} /> From</>}
+            value={origin}
+            onChange={setOrigin}
+            horizontal={horizontal}
+          />
 
-          <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
-            <label className="form-label" htmlFor="destination">
-              <PlaneLanding size={18} style={{ marginRight: '8px', verticalAlign: 'text-bottom', color: 'var(--primary-color)' }} />
-              To
-            </label>
-            <select id="destination" value={destination} onChange={(e) => setDestination(e.target.value)} className="form-input" style={{ fontSize: '1.05rem', padding: '14px 16px' }}>
-              {AIRPORTS.map((ap) => (
-                <option key={ap.code} value={ap.code}>{ap.name} ({ap.code})</option>
-              ))}
-            </select>
-          </div>
+          <AirportSelect 
+            id="destination"
+            label={<><PlaneLanding size={18} style={{ marginRight: '8px', verticalAlign: 'text-bottom', color: 'var(--primary-color)' }} /> To</>}
+            value={destination}
+            onChange={setDestination}
+            horizontal={horizontal}
+          />
 
           <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
             <label className="form-label" htmlFor="departureDate">

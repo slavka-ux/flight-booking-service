@@ -1,6 +1,7 @@
 /// <reference types="vite/client" />
 import axios from 'axios';
 import { Flight, Booking, User } from '../types';
+import { AIRPORTS } from '../data/airports';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
@@ -34,6 +35,14 @@ const MOCK_FLIGHTS: Flight[] = [
   { id: 'f4', flightNumber: 'AG-202', airline: 'SkyLine Airways', origin: 'CDG', originName: 'Paris Charles de Gaulle', destination: 'NRT', destinationName: 'Tokyo Narita', departureTime: '09:00 PM', arrivalTime: '04:30 PM', duration: '10h 30m', price: 3400, stops: 0, classType: 'First' },
   { id: 'f5', flightNumber: 'UA-301', airline: 'UkraWings', origin: 'KBP', originName: 'Kyiv Boryspil', destination: 'LHR', destinationName: 'London Heathrow', departureTime: '06:00 AM', arrivalTime: '08:20 AM', duration: '3h 20m', price: 180, stops: 0, classType: 'Economy' }
 ];
+
+const getMockFlights = (): Flight[] => {
+  const cached = localStorage.getItem('mock_all_flights');
+  if (cached) return JSON.parse(cached);
+  localStorage.setItem('mock_all_flights', JSON.stringify(MOCK_FLIGHTS));
+  return MOCK_FLIGHTS;
+};
+const saveMockFlights = (flights: Flight[]) => localStorage.setItem('mock_all_flights', JSON.stringify(flights));
 
 const isBackendOffline = async (): Promise<boolean> => {
   try {
@@ -94,18 +103,54 @@ export const authAPI = {
 export const flightsAPI = {
   search: async (params: { origin: string; destination: string; departureDate?: string; classType?: string }): Promise<Flight[]> => {
     if (await isBackendOffline()) {
-      return MOCK_FLIGHTS.filter(flight => 
+      let allFlights = getMockFlights();
+      let matches = allFlights.filter(flight => 
         flight.origin.toLowerCase() === params.origin.toLowerCase() && 
         flight.destination.toLowerCase() === params.destination.toLowerCase() &&
         (!params.classType || flight.classType === params.classType)
       );
+
+      if (matches.length === 0) {
+        const originAir = AIRPORTS.find(a => a.code.toLowerCase() === params.origin.toLowerCase());
+        const destAir = AIRPORTS.find(a => a.code.toLowerCase() === params.destination.toLowerCase());
+
+        if (originAir && destAir) {
+          const generated: Flight[] = [];
+          const count = Math.floor(Math.random() * 3) + 2; 
+          for (let i = 0; i < count; i++) {
+            const airlines = ['AeroGlide Express', 'Global Airways', 'SkyLine Airlines', 'Oceanic Air', 'Continental Wings'];
+            const airline = airlines[Math.floor(Math.random() * airlines.length)];
+            const priceBase = params.classType === 'First' ? 1200 : params.classType === 'Business' ? 600 : 200;
+            const flight: Flight = {
+              id: 'f_gen_' + Math.random().toString(36).substr(2, 9),
+              flightNumber: airline.substring(0,2).toUpperCase() + '-' + Math.floor(Math.random() * 900 + 100),
+              airline,
+              origin: originAir.code,
+              originName: originAir.name,
+              destination: destAir.code,
+              destinationName: destAir.name,
+              departureTime: `${Math.floor(Math.random()*12+1).toString().padStart(2, '0')}:${['00','15','30','45'][Math.floor(Math.random()*4)]} ${Math.random() > 0.5 ? 'AM' : 'PM'}`,
+              arrivalTime: `${Math.floor(Math.random()*12+1).toString().padStart(2, '0')}:${['00','15','30','45'][Math.floor(Math.random()*4)]} ${Math.random() > 0.5 ? 'AM' : 'PM'}`,
+              duration: `${Math.floor(Math.random()*12+2)}h ${['00','15','30','45'][Math.floor(Math.random()*4)]}m`,
+              price: priceBase + Math.floor(Math.random() * 300),
+              stops: Math.random() > 0.6 ? 1 : 0,
+              classType: (params.classType as any) || 'Economy'
+            };
+            generated.push(flight);
+          }
+          matches = generated;
+          allFlights = [...allFlights, ...generated];
+          saveMockFlights(allFlights);
+        }
+      }
+      return matches;
     }
     const res = await client.get('/flights', { params });
     return res.data;
   },
   getById: async (id: string): Promise<Flight> => {
     if (await isBackendOffline()) {
-      const flight = MOCK_FLIGHTS.find(f => f.id === id);
+      const flight = getMockFlights().find(f => f.id === id);
       if (!flight) throw new Error('Flight not found');
       return flight;
     }
@@ -121,7 +166,7 @@ export const bookingsAPI = {
     const activeUser = JSON.parse(activeUserStr) as User;
 
     if (await isBackendOffline()) {
-      const flight = MOCK_FLIGHTS.find(f => f.id === bookingData.flightId);
+      const flight = getMockFlights().find(f => f.id === bookingData.flightId);
       if (!flight) throw new Error('Selected flight not found');
 
       const newBooking: Booking = {
