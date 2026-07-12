@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuthStore } from './store/authStore';
 
 // Components
@@ -28,7 +28,7 @@ const App: React.FC = () => {
   }, [checkAuth]);
 
   return (
-    <BrowserRouter>
+    <Router>
       <div className="app-container">
         <Navbar />
         
@@ -86,7 +86,7 @@ const App: React.FC = () => {
           </div>
         </footer>
       </div>
-    </BrowserRouter>
+    </Router>
   );
 };
 
