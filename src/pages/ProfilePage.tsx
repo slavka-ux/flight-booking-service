@@ -22,7 +22,6 @@ export const ProfilePage: React.FC = () => {
         const data = await bookingsAPI.getAll();
         setBookings(data);
       } catch (err) {
-        // Handle error silently for stats
       }
     };
     fetchStats();
@@ -39,7 +38,6 @@ export const ProfilePage: React.FC = () => {
       setSuccess(true);
       setTimeout(() => setSuccess(false), 3000);
     } catch (err) {
-      // Error is handled by the store
     } finally {
       setLoading(false);
     }
@@ -49,114 +47,107 @@ export const ProfilePage: React.FC = () => {
   const totalFlights = bookings.length;
 
   return (
-    <div className="container animate-fade-in" style={{ padding: '40px 24px 80px 24px' }}>
-      <h1 style={{ fontSize: '2.25rem', fontWeight: 800, letterSpacing: '-1px', marginBottom: '8px' }}>
+    <div className="container animate-fade-in" style={{ padding: '60px 24px 80px 24px' }}>
+      <h1 style={{ fontSize: '2.5rem', fontWeight: 800, letterSpacing: '-1px', marginBottom: '8px' }}>
         Account <span className="text-gradient">Profile</span>
       </h1>
-      <p style={{ color: 'var(--text-secondary)', marginBottom: '40px' }}>
+      <p style={{ color: 'var(--text-secondary)', marginBottom: '40px', fontSize: '1.1rem' }}>
         Manage your personal information and view your travel statistics.
       </p>
 
-      <div className="profile-grid">
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '32px', alignItems: 'start' }}>
         {/* Left Column: Avatar & Stats */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-          <div className="glow-card profile-avatar-card">
-            <div className="profile-avatar">
+          <div className="card animate-fade-up" style={{ padding: '40px 24px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div style={{ width: '96px', height: '96px', borderRadius: '50%', background: 'linear-gradient(135deg, var(--primary-color), var(--secondary-color))', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '3rem', fontWeight: 800, marginBottom: '20px', boxShadow: 'var(--shadow-md)' }}>
               {user?.fullName.charAt(0).toUpperCase() || 'U'}
             </div>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '4px' }}>{user?.fullName}</h3>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '16px' }}>{user?.email}</p>
+            <h3 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '4px' }}>{user?.fullName}</h3>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', marginBottom: '24px' }}>{user?.email}</p>
             
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(16, 185, 129, 0.1)', color: 'var(--accent-success)', padding: '6px 12px', borderRadius: '999px', fontSize: '0.8rem', fontWeight: 600 }}>
-              <Shield size={14} />
-              Verified Account
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(16, 185, 129, 0.1)', color: 'var(--accent-success)', padding: '8px 16px', borderRadius: '999px', fontSize: '0.9rem', fontWeight: 700 }}>
+              <Shield size={16} /> Verified Account
             </div>
           </div>
 
-          <div className="glow-card" style={{ padding: '24px' }}>
-            <h4 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Award size={18} style={{ color: 'var(--accent-primary)' }} />
-              Travel Statistics
+          <div className="card animate-fade-up" style={{ animationDelay: '0.1s', padding: '32px' }}>
+            <h4 style={{ fontSize: '1.1rem', fontWeight: 800, marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Award size={20} style={{ color: 'var(--primary-color)' }} /> Travel Statistics
             </h4>
             
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '16px', borderBottom: '1px solid var(--border-color)' }}>
-                <span style={{ color: 'var(--text-secondary)' }}>Active Bookings</span>
-                <span style={{ fontSize: '1.25rem', fontWeight: 800 }}>{activeBookings}</span>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '20px', borderBottom: '1px solid var(--border-color)' }}>
+                <span style={{ color: 'var(--text-secondary)', fontSize: '1.05rem', fontWeight: 500 }}>Active Bookings</span>
+                <span className="text-gradient" style={{ fontSize: '1.75rem', fontWeight: 800 }}>{activeBookings}</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ color: 'var(--text-secondary)' }}>Total Flights</span>
-                <span style={{ fontSize: '1.25rem', fontWeight: 800 }}>{totalFlights}</span>
+                <span style={{ color: 'var(--text-secondary)', fontSize: '1.05rem', fontWeight: 500 }}>Total Flights</span>
+                <span style={{ fontSize: '1.75rem', fontWeight: 800 }}>{totalFlights}</span>
               </div>
             </div>
           </div>
         </div>
 
         {/* Right Column: Settings Form */}
-        <div className="glow-card" style={{ padding: '32px' }}>
-          <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Settings size={20} style={{ color: 'var(--accent-primary)' }} />
-            Personal Information
+        <div className="card animate-fade-up" style={{ animationDelay: '0.2s', padding: '40px' }}>
+          <h3 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '32px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <Settings size={24} style={{ color: 'var(--primary-color)' }} /> Personal Information
           </h3>
 
           {error && (
-            <div style={{ padding: '12px', background: 'rgba(239, 68, 68, 0.1)', color: 'var(--accent-danger)', borderRadius: '8px', marginBottom: '24px', fontSize: '0.875rem' }}>
+            <div className="animate-scale-in" style={{ padding: '16px', background: '#fef2f2', color: '#b91c1c', borderRadius: '12px', marginBottom: '24px', fontSize: '0.95rem', fontWeight: 500, border: '1px solid #fca5a5' }}>
               {error}
             </div>
           )}
 
           {success && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px', background: 'rgba(16, 185, 129, 0.1)', color: 'var(--accent-success)', borderRadius: '8px', marginBottom: '24px', fontSize: '0.875rem' }}>
-              <CheckCircle size={18} />
-              Profile updated successfully!
+            <div className="animate-scale-in" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '16px', background: '#f0fdf4', color: '#15803d', borderRadius: '12px', marginBottom: '24px', fontSize: '0.95rem', fontWeight: 600, border: '1px solid #86efac' }}>
+              <CheckCircle size={20} /> Profile updated successfully!
             </div>
           )}
 
-          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-            <div className="form-group">
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+            <div className="form-group" style={{ marginBottom: 0 }}>
               <label className="form-label" htmlFor="fullName">Full Name</label>
               <div style={{ position: 'relative' }}>
-                <User size={18} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+                <User size={20} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
                 <input
                   id="fullName"
                   type="text"
                   required
                   className="form-input"
-                  style={{ paddingLeft: '48px', width: '100%' }}
+                  style={{ paddingLeft: '48px', fontSize: '1.05rem', paddingRight: '16px', paddingTop: '14px', paddingBottom: '14px' }}
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                 />
               </div>
             </div>
 
-            <div className="form-group">
+            <div className="form-group" style={{ marginBottom: 0 }}>
               <label className="form-label" htmlFor="passport">Passport Number (Optional)</label>
               <div style={{ position: 'relative' }}>
-                <FileText size={18} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+                <FileText size={20} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
                 <input
                   id="passport"
                   type="text"
                   className="form-input"
-                  style={{ paddingLeft: '48px', width: '100%' }}
+                  style={{ paddingLeft: '48px', fontSize: '1.05rem', paddingRight: '16px', paddingTop: '14px', paddingBottom: '14px' }}
                   placeholder="e.g. AB123456"
                   value={passportNumber}
                   onChange={(e) => setPassportNumber(e.target.value)}
                 />
               </div>
-              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '4px' }}>
-                This will be automatically filled when booking a flight.
-              </span>
             </div>
 
-            <div className="form-group">
+            <div className="form-group" style={{ marginBottom: 0 }}>
               <label className="form-label" htmlFor="phone">Phone Number (Optional)</label>
               <div style={{ position: 'relative' }}>
-                <Phone size={18} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+                <Phone size={20} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
                 <input
                   id="phone"
                   type="tel"
                   className="form-input"
-                  style={{ paddingLeft: '48px', width: '100%' }}
+                  style={{ paddingLeft: '48px', fontSize: '1.05rem', paddingRight: '16px', paddingTop: '14px', paddingBottom: '14px' }}
                   placeholder="e.g. +380991234567"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
@@ -164,12 +155,12 @@ export const ProfilePage: React.FC = () => {
               </div>
             </div>
 
-            <div style={{ marginTop: '12px', borderTop: '1px solid var(--border-color)', paddingTop: '24px', display: 'flex', justifyContent: 'flex-end' }}>
+            <div style={{ marginTop: '20px', borderTop: '1px solid var(--border-color)', paddingTop: '32px', display: 'flex', justifyContent: 'flex-end' }}>
               <button 
                 type="submit" 
-                className="btn-primary" 
+                className="btn btn-primary" 
                 disabled={loading}
-                style={{ padding: '12px 32px' }}
+                style={{ padding: '16px 40px', fontSize: '1.1rem' }}
               >
                 {loading ? 'Saving...' : 'Save Changes'}
               </button>
