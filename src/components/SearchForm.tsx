@@ -14,7 +14,10 @@ const AIRPORTS = [
   { code: 'CDG', name: 'Paris Charles de Gaulle' },
   { code: 'NRT', name: 'Tokyo Narita' },
   { code: 'KBP', name: 'Kyiv Boryspil' },
-  { code: 'DXB', name: 'Dubai International' }
+  { code: 'DXB', name: 'Dubai International' },
+  { code: 'FCO', name: 'Rome Fiumicino' },
+  { code: 'SYD', name: 'Sydney Kingsford Smith' },
+  { code: 'DPS', name: 'Bali Ngurah Rai' }
 ];
 
 export const SearchForm: React.FC<SearchFormProps> = ({ initialValues, onSearch, horizontal = false }) => {

@@ -7,7 +7,11 @@ const DESTINATIONS = [
   { id: 'd1', code: 'CDG', city: 'Paris', country: 'France', image: 'images/paris.png', tag: 'Romantic' },
   { id: 'd2', code: 'NRT', city: 'Tokyo', country: 'Japan', image: 'images/tokyo.png', tag: 'Culture' },
   { id: 'd3', code: 'JFK', city: 'New York', country: 'USA', image: 'images/new_york.png', tag: 'Vibrant' },
-  { id: 'd4', code: 'DXB', city: 'Dubai', country: 'UAE', image: 'images/dubai.png', tag: 'Luxury' }
+  { id: 'd4', code: 'DXB', city: 'Dubai', country: 'UAE', image: 'images/dubai.png', tag: 'Luxury' },
+  { id: 'd5', code: 'FCO', city: 'Rome', country: 'Italy', image: 'images/rome.png', tag: 'Historic' },
+  { id: 'd6', code: 'SYD', city: 'Sydney', country: 'Australia', image: 'images/sydney.png', tag: 'Coastal' },
+  { id: 'd7', code: 'DPS', city: 'Bali', country: 'Indonesia', image: 'images/bali.png', tag: 'Tropical' },
+  { id: 'd8', code: 'LHR', city: 'London', country: 'UK', image: 'images/london.png', tag: 'Iconic' }
 ];
 
 export const HomePage: React.FC = () => {
