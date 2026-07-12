@@ -1,7 +1,17 @@
 import React from 'react';
+import { useNavigate, createSearchParams } from 'react-router-dom';
 import { SearchForm } from '../components/SearchForm';
 
 export const SearchPage: React.FC = () => {
+  const navigate = useNavigate();
+
+  const handleSearch = (query: any) => {
+    navigate({
+      pathname: '/flights',
+      search: createSearchParams(query).toString()
+    });
+  };
+
   return (
     <div style={{ backgroundColor: 'var(--bg-secondary)', minHeight: 'calc(100vh - 72px - 200px)', padding: '60px 0' }}>
       <div className="container">
@@ -12,7 +22,7 @@ export const SearchPage: React.FC = () => {
           </p>
         </div>
         
-        <SearchForm />
+        <SearchForm onSearch={handleSearch} />
       </div>
     </div>
   );

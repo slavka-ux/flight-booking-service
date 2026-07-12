@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { bookingsAPI } from '../api/client';
 import { Booking } from '../types';
-import { Loader2, Ticket, Calendar, Clock, MapPin, XCircle, CheckCircle } from 'lucide-react';
+import { Loader2, Ticket, Calendar, MapPin, XCircle, CheckCircle } from 'lucide-react';
 
 export const MyBookingsPage: React.FC = () => {
   const [bookings, setBookings] = useState<Booking[]>([]);

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate, createSearchParams } from 'react-router-dom';
 import { flightsAPI } from '../api/client';
 import { Flight } from '../types';
 import { FlightCard } from '../components/FlightCard';
@@ -8,6 +8,14 @@ import { Loader2, SearchX } from 'lucide-react';
 
 export const FlightsPage: React.FC = () => {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+
+  const handleSearch = (query: any) => {
+    navigate({
+      pathname: '/flights',
+      search: createSearchParams(query).toString()
+    });
+  };
   const [flights, setFlights] = useState<Flight[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -42,7 +50,7 @@ export const FlightsPage: React.FC = () => {
     <div style={{ backgroundColor: 'var(--bg-secondary)', minHeight: 'calc(100vh - 72px - 200px)' }}>
       <div style={{ backgroundColor: 'white', borderBottom: '1px solid var(--border-color)', padding: '24px 0' }}>
         <div className="container">
-          <SearchForm />
+          <SearchForm onSearch={handleSearch} initialValues={{ origin, destination, departureDate: date, classType: classType as any }} />
         </div>
       </div>
       
