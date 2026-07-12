@@ -47,10 +47,10 @@ export const FlightsPage: React.FC = () => {
   }, [origin, destination, date, classType]);
 
   return (
-    <div style={{ backgroundColor: 'var(--bg-secondary)', minHeight: 'calc(100vh - 72px - 200px)' }}>
-      <div style={{ backgroundColor: 'white', borderBottom: '1px solid var(--border-color)', padding: '24px 0' }}>
+    <div className="animate-fade-in" style={{ backgroundColor: 'var(--bg-secondary)', minHeight: 'calc(100vh - 80px)' }}>
+      <div style={{ backgroundColor: 'var(--bg-primary)', borderBottom: '1px solid var(--border-color)', padding: '40px 0', boxShadow: 'var(--shadow-sm)' }}>
         <div className="container">
-          <SearchForm onSearch={handleSearch} initialValues={{ origin, destination, departureDate: date, classType: classType as any }} />
+          <SearchForm onSearch={handleSearch} initialValues={{ origin, destination, departureDate: date, classType: classType as any }} horizontal />
         </div>
       </div>
       

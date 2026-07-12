@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { SearchQuery } from '../types';
-import { PlaneTakeoff, PlaneLanding, Calendar, Award, User } from 'lucide-react';
+import { PlaneTakeoff, PlaneLanding, Calendar, Award, User, Search } from 'lucide-react';
 
 interface SearchFormProps {
   initialValues?: SearchQuery;
   onSearch: (query: SearchQuery) => void;
+  horizontal?: boolean;
 }
 
 const AIRPORTS = [
@@ -16,7 +17,7 @@ const AIRPORTS = [
   { code: 'DXB', name: 'Dubai International' }
 ];
 
-export const SearchForm: React.FC<SearchFormProps> = ({ initialValues, onSearch }) => {
+export const SearchForm: React.FC<SearchFormProps> = ({ initialValues, onSearch, horizontal = false }) => {
   const [origin, setOrigin] = useState(initialValues?.origin || 'LHR');
   const [destination, setDestination] = useState(initialValues?.destination || 'JFK');
   const [departureDate, setDepartureDate] = useState(initialValues?.departureDate || new Date().toISOString().split('T')[0]);
@@ -34,64 +35,79 @@ export const SearchForm: React.FC<SearchFormProps> = ({ initialValues, onSearch 
   };
 
   return (
-    <form onSubmit={handleSubmit} className="glow-card" style={{ padding: '32px' }}>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-        <h2 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '4px' }}>Search Flights</h2>
+    <form onSubmit={handleSubmit} className={horizontal ? "" : "card animate-fade-up"} style={{ padding: horizontal ? '0' : '40px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+        {!horizontal && (
+          <h2 style={{ fontSize: '1.75rem', fontWeight: 800, marginBottom: '8px' }}>Find Your Flight</h2>
+        )}
         
-        <div className="search-form-grid">
-          <div className="form-group">
+        <div className={horizontal ? "search-form-horizontal" : ""} style={{ display: horizontal ? 'flex' : 'grid', gridTemplateColumns: horizontal ? 'none' : '1fr 1fr', gap: '24px' }}>
+          <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
             <label className="form-label" htmlFor="origin">
-              <PlaneTakeoff size={14} style={{ marginRight: '6px', verticalAlign: 'text-bottom' }} />
+              <PlaneTakeoff size={18} style={{ marginRight: '8px', verticalAlign: 'text-bottom', color: 'var(--primary-color)' }} />
               From
             </label>
-            <select id="origin" value={origin} onChange={(e) => setOrigin(e.target.value)} className="form-input form-select">
+            <select id="origin" value={origin} onChange={(e) => setOrigin(e.target.value)} className="form-input" style={{ fontSize: '1.05rem', padding: '14px 16px' }}>
               {AIRPORTS.map((ap) => (
-                <option key={ap.code} value={ap.code} style={{ background: '#0d1224' }}>{ap.name} ({ap.code})</option>
+                <option key={ap.code} value={ap.code}>{ap.name} ({ap.code})</option>
               ))}
             </select>
           </div>
 
-          <div className="form-group">
+          <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
             <label className="form-label" htmlFor="destination">
-              <PlaneLanding size={14} style={{ marginRight: '6px', verticalAlign: 'text-bottom' }} />
+              <PlaneLanding size={18} style={{ marginRight: '8px', verticalAlign: 'text-bottom', color: 'var(--primary-color)' }} />
               To
             </label>
-            <select id="destination" value={destination} onChange={(e) => setDestination(e.target.value)} className="form-input form-select">
+            <select id="destination" value={destination} onChange={(e) => setDestination(e.target.value)} className="form-input" style={{ fontSize: '1.05rem', padding: '14px 16px' }}>
               {AIRPORTS.map((ap) => (
-                <option key={ap.code} value={ap.code} style={{ background: '#0d1224' }}>{ap.name} ({ap.code})</option>
+                <option key={ap.code} value={ap.code}>{ap.name} ({ap.code})</option>
               ))}
             </select>
           </div>
 
-          <div className="form-group">
+          <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
             <label className="form-label" htmlFor="departureDate">
-              <Calendar size={14} style={{ marginRight: '6px', verticalAlign: 'text-bottom' }} />
-              Departure Date
+              <Calendar size={18} style={{ marginRight: '8px', verticalAlign: 'text-bottom', color: 'var(--primary-color)' }} />
+              Date
             </label>
-            <input id="departureDate" type="date" value={departureDate} min={new Date().toISOString().split('T')[0]} onChange={(e) => setDepartureDate(e.target.value)} className="form-input" />
+            <input id="departureDate" type="date" value={departureDate} min={new Date().toISOString().split('T')[0]} onChange={(e) => setDepartureDate(e.target.value)} className="form-input" style={{ fontSize: '1.05rem', padding: '14px 16px' }} />
           </div>
 
-          <div className="form-group">
+          <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
             <label className="form-label" htmlFor="classType">
-              <Award size={14} style={{ marginRight: '6px', verticalAlign: 'text-bottom' }} />
-              Cabin Class
+              <Award size={18} style={{ marginRight: '8px', verticalAlign: 'text-bottom', color: 'var(--primary-color)' }} />
+              Class
             </label>
-            <select id="classType" value={classType} onChange={(e) => setClassType(e.target.value as SearchQuery['classType'])} className="form-input form-select">
-              <option value="Economy" style={{ background: '#0d1224' }}>Economy</option>
-              <option value="Business" style={{ background: '#0d1224' }}>Business</option>
-              <option value="First" style={{ background: '#0d1224' }}>First Class</option>
+            <select id="classType" value={classType} onChange={(e) => setClassType(e.target.value as SearchQuery['classType'])} className="form-input" style={{ fontSize: '1.05rem', padding: '14px 16px' }}>
+              <option value="Economy">Economy</option>
+              <option value="Business">Business</option>
+              <option value="First">First Class</option>
             </select>
           </div>
+
+          {horizontal && (
+             <div style={{ flex: '0 0 auto', display: 'flex', alignItems: 'flex-end' }}>
+               <button type="submit" className="btn btn-primary" style={{ height: '54px', padding: '0 32px', fontSize: '1.1rem' }}>
+                 <Search size={20} /> Search
+               </button>
+             </div>
+          )}
         </div>
 
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px', borderTop: '1px solid var(--border-color)', paddingTop: '20px', marginTop: '10px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
-            <User size={16} style={{ color: 'var(--accent-primary)' }} />
-            <span>Passengers: <strong>1 Adult</strong> <span style={{ color: 'var(--accent-cyan)', fontSize: '0.75rem', marginLeft: '4px', background: 'rgba(6, 182, 212, 0.1)', padding: '2px 8px', borderRadius: '4px' }}>Single Passenger Flow</span></span>
+        {error && <div className="animate-scale-in" style={{ color: '#ef4444', fontSize: '1rem', fontWeight: 600, background: '#fef2f2', padding: '16px', borderRadius: '12px', border: '1px solid #fca5a5' }}>{error}</div>}
+
+        {!horizontal && (
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px', borderTop: '1px solid var(--border-color)', paddingTop: '32px', marginTop: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--text-secondary)', fontSize: '1rem' }}>
+              <User size={20} style={{ color: 'var(--primary-color)' }} />
+              <span>Passengers: <strong>1 Adult</strong></span>
+            </div>
+            <button type="submit" className="btn btn-primary" style={{ padding: '16px 40px', fontSize: '1.15rem' }}>
+              <Search size={20} /> Search Flights
+            </button>
           </div>
-          {error && <div style={{ color: 'var(--accent-danger)', fontSize: '0.875rem', fontWeight: 500 }}>{error}</div>}
-          <button type="submit" className="btn-primary" style={{ minWidth: '160px' }}>Search Flights</button>
-        </div>
+        )}
       </div>
     </form>
   );
