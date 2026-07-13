@@ -82,7 +82,11 @@ export const FlightsPage: React.FC = () => {
             </h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               {flights.map((flight) => (
-                <FlightCard key={flight.id} flight={flight} />
+                <FlightCard 
+                  key={flight.id} 
+                  flight={flight} 
+                  onSelect={(id) => navigate(`/book/${id}`)}
+                />
               ))}
             </div>
           </div>
