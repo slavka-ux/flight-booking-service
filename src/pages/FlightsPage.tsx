@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate, createSearchParams } from 'react-router-dom';
-import { flightsAPI } from '../api/client';
+import { flightsAPI, bookingsAPI } from '../api/client';
+import { useAuthStore } from '../store/authStore';
 import { Flight } from '../types';
 import { FlightCard } from '../components/FlightCard';
 import { SearchForm } from '../components/SearchForm';
@@ -9,6 +10,8 @@ import { Loader2, SearchX } from 'lucide-react';
 export const FlightsPage: React.FC = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { isAuthenticated, user } = useAuthStore();
+  const [bookingInProgress, setBookingInProgress] = useState<string | null>(null);
 
   const handleSearch = (query: any) => {
     navigate({
@@ -46,6 +49,29 @@ export const FlightsPage: React.FC = () => {
     }
   }, [origin, destination, date, classType]);
 
+  const handleInstantBook = async (flightId: string) => {
+    if (!isAuthenticated || !user) {
+      navigate('/login');
+      return;
+    }
+
+    setBookingInProgress(flightId);
+    try {
+      await bookingsAPI.create({
+        flightId,
+        passengerName: user.fullName || 'Passenger',
+        passengerPassport: user.passportNumber || '',
+        passengerPhone: user.phone || '',
+        seatNumber: ''
+      });
+      navigate('/bookings');
+    } catch (err: any) {
+      alert(err.message || 'Failed to create booking');
+    } finally {
+      setBookingInProgress(null);
+    }
+  };
+
   return (
     <div className="animate-fade-in" style={{ backgroundColor: 'var(--bg-secondary)', minHeight: 'calc(100vh - 80px)' }}>
       <div style={{ backgroundColor: 'var(--bg-primary)', borderBottom: '1px solid var(--border-color)', padding: '40px 0', boxShadow: 'var(--shadow-sm)' }}>
@@ -82,11 +108,12 @@ export const FlightsPage: React.FC = () => {
             </h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               {flights.map((flight) => (
-                <FlightCard 
-                  key={flight.id} 
-                  flight={flight} 
-                  onSelect={(id) => navigate(`/book/${id}`)}
-                />
+                <div key={flight.id} style={{ opacity: bookingInProgress === flight.id ? 0.6 : 1, pointerEvents: bookingInProgress === flight.id ? 'none' : 'auto' }}>
+                  <FlightCard 
+                    flight={flight} 
+                    onSelect={handleInstantBook}
+                  />
+                </div>
               ))}
             </div>
           </div>
